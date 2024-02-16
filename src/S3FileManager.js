@@ -7,10 +7,10 @@ const S3FileManager = () => {
   useEffect(() => {
     fetchLastUpdatedObject();
 
-    // Establece un temporizador para actualizar el último objeto cada 10 segundos
-    const timer = setInterval(fetchLastUpdatedObject, 10000);
+    // Establece un temporizador para actualizar el último objeto cada 5 segundos
+    const timer = setInterval(fetchLastUpdatedObject, 5000);
 
-    return () => clearInterval(timer); // Limpiar el temporizador al desmontar el componente
+    return () => clearInterval(timer); // Limpiar el temporizador
   }, []);
 
   const fetchLastUpdatedObject = () => {
@@ -24,7 +24,7 @@ const S3FileManager = () => {
     // Crea una instancia de S3
     const s3 = new AWS.S3();
 
-    // Reemplaza 'your-bucket-name' con el nombre de tu bucket S3
+    // Reemplaza 'mynewbucket-one' con el nombre de tu bucket
     const bucketName = 'mynewbucket-one';
 
     // Lista los objetos en el bucket de S3
@@ -32,12 +32,12 @@ const S3FileManager = () => {
       if (err) {
         console.error(err);
       } else {
-        // Ordena los objetos basados en la marca de tiempo de la última modificación
+        // Ordena los objetos basados en el timestamp de la última modificación
         const sortedObjects = data.Contents.sort((a, b) => {
           return new Date(b.LastModified) - new Date(a.LastModified);
         });
 
-        // Establece el último objeto actualizado
+        // Ultimo objeto actualizado
         if (sortedObjects.length > 0) {
           setLastUpdatedObject(sortedObjects[0]);
         }
